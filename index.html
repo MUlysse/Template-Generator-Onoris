@@ -49,8 +49,8 @@
     #btn-dl:disabled { opacity: 0.28; cursor: not-allowed; }
     #preview { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 28px 32px; background: var(--bg); overflow: auto; }
     .prev-label { font-size: 10px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted); flex-shrink: 0; }
-    #canvas-shell { line-height: 0; border-radius: 2px; overflow: hidden; flex-shrink: 0; box-shadow: 0 0 0 1px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.14); }
-    #canvas { display: block; }
+    #canvas-shell { line-height: 0; border-radius: 2px; overflow: hidden; box-shadow: 0 0 0 1px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.14); width: min(100%, calc(100vh - 140px)); flex-shrink: 1; }
+    #canvas { display: block; width: 100%; height: auto; }
     .prev-meta { font-size: 10.5px; color: var(--muted); flex-shrink: 0; }
   </style>
 </head>
