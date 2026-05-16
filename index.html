@@ -5,29 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Onoris Journal &#8211; Generateur LinkedIn</title>
 
-  <!-- Google Fonts : Inter (rubrique) | Noto Serif Display (titre + logo) | Open Sans (auteur / credit) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&family=Noto+Serif+Display:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+Display:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================
-       RESET & VARIABLES CSS
+       RESET
     ========================================================== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* ==========================================================
+       VARIABLES — DA claire, noir & blanc, classique
+    ========================================================== */
     :root {
-      --bg:       #0b0c14;
-      --panel:    #12131e;
-      --card:     #1b1d2e;
-      --border:   #252840;
-      --accent:   #4a72f5;
-      --accent-a: rgba(74,114,245,0.10);
-      --text:     #e2e4f0;
-      --muted:    #656885;
-      --ok:       #27c97c;
-      --err:      #e05454;
-      --r:        8px;
+      --bg:       #f2f2f0;
+      --panel:    #ffffff;
+      --card:     #f7f7f5;
+      --border:   #d4d4d0;
+      --border-s: #b0b0aa;
+      --text:     #111111;
+      --muted:    #888882;
+      --ok:       #2a6e2a;
+      --err:      #b82020;
+      --btn:      #111111;
+      --btn-txt:  #ffffff;
+      --accent:   #111111;
+      --r:        3px;
     }
 
     html, body {
@@ -35,20 +39,20 @@
       background: var(--bg);
       color: var(--text);
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: 14px;
+      font-size: 13.5px;
       line-height: 1.5;
     }
 
     /* ==========================================================
-       LAYOUT PRINCIPAL — 2 colonnes : panneau + apercu
+       LAYOUT
     ========================================================== */
     .app { display: flex; height: 100vh; overflow: hidden; }
 
     /* ==========================================================
-       PANNEAU GAUCHE (formulaire)
+       PANNEAU GAUCHE
     ========================================================== */
     #sidebar {
-      width: 355px;
+      width: 340px;
       flex-shrink: 0;
       background: var(--panel);
       border-right: 1px solid var(--border);
@@ -59,47 +63,70 @@
 
     /* En-tete */
     #sidebar-head {
-      padding: 18px 20px 16px;
+      padding: 20px 22px 18px;
       border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
       display: flex;
-      align-items: center;
-      gap: 11px;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 3px;
     }
 
-    .head-logo {
-      width: 36px; height: 36px;
-      background: var(--accent);
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Noto Serif Display', Georgia, serif;
-      font-style: italic; font-size: 16px;
-      color: #fff; flex-shrink: 0;
+    .brand-name {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--text);
     }
 
-    #sidebar-head h1 { font-size: 14.5px; font-weight: 700; line-height: 1.25; }
-    #sidebar-head h1 small {
-      display: block; font-size: 11px; font-weight: 400;
-      color: var(--muted); margin-top: 2px;
+    .brand-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 2px 7px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
     }
 
-    /* Corps scrollable des champs */
+    .brand-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* Corps scrollable */
     #form-body {
-      flex: 1; overflow-y: auto; padding: 20px;
-      display: flex; flex-direction: column; gap: 16px;
-      scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
     }
 
     /* Groupe champ */
-    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
 
     .field > label {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.07em; text-transform: uppercase;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--muted);
     }
-    .field > label > span {
-      font-weight: 400; text-transform: none;
-      letter-spacing: 0; color: #363855;
+
+    .field > label > em {
+      font-style: normal;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: #bbb;
     }
 
     input[type="text"], textarea {
@@ -107,90 +134,130 @@
       border: 1px solid var(--border);
       border-radius: var(--r);
       color: var(--text);
-      font-family: inherit; font-size: 13.5px;
-      padding: 10px 12px; width: 100%;
-      outline: none; transition: border-color 0.15s;
+      font-family: inherit;
+      font-size: 13px;
+      padding: 9px 11px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.12s;
     }
-    input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
-    textarea { resize: vertical; min-height: 88px; line-height: 1.55; }
 
-    /* Zone de depot d'image */
-    #drop-zone {
-      border: 2px dashed var(--border);
+    input[type="text"]:focus,
+    textarea:focus { border-color: var(--border-s); }
+
+    textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+    /* Zone de depot */
+    .dz {
+      border: 1px dashed var(--border);
       border-radius: var(--r);
-      padding: 28px 16px; text-align: center;
-      cursor: pointer; user-select: none;
-      transition: border-color 0.15s, background 0.15s;
+      padding: 20px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+      user-select: none;
+      background: var(--card);
     }
-    #drop-zone:hover, #drop-zone.over {
-      border-color: var(--accent); background: var(--accent-a);
+
+    .dz:hover, .dz.over {
+      border-color: var(--border-s);
+      background: #f0f0ee;
     }
-    #drop-zone.filled { border-style: solid; border-color: var(--ok); }
-    #drop-zone .dz-ico { font-size: 28px; line-height: 1; margin-bottom: 7px; }
-    #drop-zone .dz-main { font-size: 13px; }
-    #drop-zone .dz-main strong { color: var(--accent); }
-    #drop-zone.filled .dz-main strong { color: var(--ok); }
-    #drop-zone .dz-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
-    #file-input { display: none; }
+
+    .dz.filled { border-style: solid; border-color: var(--ok); }
+
+    .dz .ico { font-size: 22px; line-height: 1; margin-bottom: 5px; }
+    .dz .lbl { font-size: 12px; color: var(--text); }
+    .dz .lbl strong { font-weight: 600; }
+    .dz.filled .lbl strong { color: var(--ok); }
+    .dz .hint { font-size: 10.5px; color: var(--muted); margin-top: 3px; }
+
+    input[type="file"] { display: none; }
 
     .sep { height: 1px; background: var(--border); border: none; }
 
-    /* Pied du panneau */
+    /* Pied */
     #sidebar-foot {
-      padding: 16px 20px;
+      padding: 14px 22px;
       border-top: 1px solid var(--border);
-      display: flex; flex-direction: column; gap: 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    #status { font-size: 11.5px; color: var(--muted); text-align: center; min-height: 16px; }
+    #status {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      min-height: 14px;
+    }
     #status.ok  { color: var(--ok); }
     #status.err { color: var(--err); }
 
     #btn-dl {
-      width: 100%; padding: 12px 16px;
-      background: var(--accent); color: #fff;
-      border: none; border-radius: var(--r);
-      font-family: inherit; font-size: 13.5px;
-      font-weight: 700; letter-spacing: 0.02em;
-      cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+      width: 100%;
+      padding: 11px 16px;
+      background: var(--btn);
+      color: var(--btn-txt);
+      border: none;
+      border-radius: var(--r);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: opacity 0.12s;
     }
-    #btn-dl:hover:not(:disabled) { opacity: 0.88; }
-    #btn-dl:active:not(:disabled) { transform: scale(0.985); }
-    #btn-dl:disabled { opacity: 0.32; cursor: not-allowed; }
+    #btn-dl:hover:not(:disabled) { opacity: 0.80; }
+    #btn-dl:disabled { opacity: 0.28; cursor: not-allowed; }
 
     /* ==========================================================
-       ZONE D'APERCU
+       APERCU
     ========================================================== */
     #preview {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 13px; padding: 30px; overflow: hidden;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 28px 32px;
       background: var(--bg);
+      overflow: auto; /* scroll si la fenetre est trop petite */
     }
 
     .prev-label {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
       color: var(--muted);
+      flex-shrink: 0;
     }
 
     #canvas-shell {
-      line-height: 0; border-radius: 5px; overflow: hidden;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 20px 60px rgba(0,0,0,0.55);
+      line-height: 0;
+      border-radius: 2px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.10),
+        0 8px 32px rgba(0,0,0,0.14);
     }
 
     #canvas { display: block; }
-    .prev-meta { font-size: 11px; color: var(--muted); }
+
+    .prev-meta {
+      font-size: 10.5px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
 
-<!--
-  Elements invisibles : forcent le chargement des polices Google dans le DOM
-  avant que le canvas ne les utilise. Sans ca, le premier rendu utilise
-  les polices systeme de fallback.
--->
-<div aria-hidden="true" style="position:fixed;top:-999px;left:-999px;pointer-events:none;opacity:0;font-size:1px;">
+<!-- Preload polices pour canvas (evite le fallback au premier rendu) -->
+<div aria-hidden="true" style="position:fixed;top:-9999px;opacity:0;pointer-events:none;font-size:1px;">
   <b style="font-family:'Inter'">x</b>
   <i style="font-family:'Noto Serif Display'">x</i>
   <span style="font-family:'Open Sans'">x</span>
@@ -199,54 +266,73 @@
 <div class="app">
 
   <!-- ============================================================
-       PANNEAU GAUCHE
+       PANNEAU GAUCHE — Formulaire
   ============================================================ -->
   <aside id="sidebar">
 
     <div id="sidebar-head">
-      <div class="head-logo">O&#8217;</div>
-      <h1>Onoris Journal<small>Generateur de visuels LinkedIn</small></h1>
+      <div class="brand">
+        <span class="brand-name">Onoris Journal</span>
+        <span class="brand-tag">1 080 &#215; 1 350</span>
+      </div>
+      <div class="brand-sub">Generateur de visuels LinkedIn</div>
     </div>
 
     <div id="form-body">
 
+      <!-- Image de fond -->
       <div class="field">
         <label>Image de fond</label>
-        <div id="drop-zone">
-          <div class="dz-ico">&#128444;&#65039;</div>
-          <p class="dz-main"><strong>Cliquez ou deposez</strong> l&#8217;image ici</p>
-          <p class="dz-hint">JPG &middot; PNG &middot; WEBP</p>
+        <div class="dz" id="dz-bg">
+          <div class="ico">&#128444;</div>
+          <p class="lbl"><strong>Cliquer ou deposer</strong> l&#8217;image</p>
+          <p class="hint">JPG &middot; PNG &middot; WEBP &middot; AVIF</p>
         </div>
-        <input type="file" id="file-input" accept="image/*">
+        <input type="file" id="fi-bg" accept="image/*">
+      </div>
+
+      <!-- Logo -->
+      <div class="field">
+        <label>Logo O&#8217; <em>(PNG blanc, fond transparent)</em></label>
+        <div class="dz" id="dz-logo">
+          <div class="ico">&#9711;</div>
+          <p class="lbl"><strong>Deposer</strong> le logo PNG</p>
+          <p class="hint">Fond transparent recommande</p>
+        </div>
+        <input type="file" id="fi-logo" accept="image/png,image/svg+xml">
       </div>
 
       <hr class="sep">
 
+      <!-- Rubrique -->
       <div class="field">
         <label>Rubrique</label>
-        <input type="text" id="inp-rubrique" value="GEOPOLITICS" placeholder="ex : GEOPOLITIQUE, ECONOMIE...">
+        <input type="text" id="inp-rub" value="GEOPOLITICS" placeholder="GEOPOLITIQUE, ECONOMIE...">
       </div>
 
+      <!-- Titre -->
       <div class="field">
-        <label>Titre de l&#8217;article</label>
-        <textarea id="inp-titre" placeholder="Saisissez le titre...">Mali Is the Linchpin of West Africa &#8211; Now It&#8217;s Under Jihadist Siege</textarea>
+        <label>Titre</label>
+        <textarea id="inp-titre" placeholder="Titre de l'article...">Mali Is the Linchpin of West Africa &#8211; Now It&#8217;s Under Jihadist Siege</textarea>
       </div>
 
+      <!-- Auteur -->
       <div class="field">
         <label>Auteur</label>
-        <input type="text" id="inp-auteur" value="By Louis Dubois-Delsart" placeholder="ex : By Prenom NOM">
+        <input type="text" id="inp-auteur" value="By Louis Dubois-Delsart" placeholder="By Prenom NOM">
       </div>
 
+      <!-- Credit -->
       <div class="field">
-        <label>Credit photo <span>(optionnel &#8212; vide = masque)</span></label>
-        <input type="text" id="inp-credit" placeholder="ex : Photo : AFP / Getty Images">
+        <label>Credit photo <em>(vide = masque)</em></label>
+        <input type="text" id="inp-credit" placeholder="Photo : AFP / Getty Images">
       </div>
 
-    </div>
+    </div><!-- /#form-body -->
 
     <div id="sidebar-foot">
-      <div id="status">En attente d&#8217;une image de fond&#8230;</div>
-      <button id="btn-dl" disabled>&#8595;&nbsp;&nbsp;Generer &amp; Telecharger en .PNG</button>
+      <div id="status">En attente d&#8217;une image&#8230;</div>
+      <button id="btn-dl" disabled>&#8595;&nbsp; Generer &amp; Telecharger .PNG</button>
     </div>
 
   </aside>
@@ -257,320 +343,330 @@
   <main id="preview">
     <span class="prev-label">Apercu en temps reel</span>
     <div id="canvas-shell"><canvas id="canvas"></canvas></div>
-    <span class="prev-meta">1 080 &times; 1 080 px &middot; PNG haute resolution</span>
+    <span class="prev-meta">1 080 &#215; 1 350 px &middot; Format 4:5 &middot; PNG haute resolution</span>
   </main>
 
-</div>
+</div><!-- /.app -->
+
 
 <script>
 /* ================================================================
-   ONORIS JOURNAL - GENERATEUR DE VISUELS LINKEDIN
+   ONORIS JOURNAL — GENERATEUR DE VISUELS LINKEDIN
    ----------------------------------------------------------------
-   Fichier unique HTML / CSS / JS vanilla, zero dependance.
-
-   Ordre de rendu des couches (bas vers haut) :
-     1. Image de fond      - object-fit: cover
-     2. Overlay degrade    - noircit haut & bas pour la lisibilite
-     3. Bloc Rubrique      - rectangle #2A3342 + Inter 700 29px
-     4. Titre              - Noto Serif Display 400 74px, word-wrap auto
-     5. Auteur             - Open Sans 400 27px, place sous le titre
-     6. Credit photo       - Open Sans 400 23px, bas-gauche, optionnel
-     7. Logo O'            - Noto Serif Display italic 96px, stroke seul
+   Format  : 1 080 x 1 350 px (ratio 4:5)
+   Couches : image cover → overlay → rubrique → titre → auteur
+             → credit photo → logo PNG
 ================================================================ */
 
-/* ── Dimensions internes (resolution finale de l'export PNG) ──── */
-var W = 1080, H = 1080;
+/* ── Dimensions canvas (pixels internes = resolution export) ─── */
+var W = 1080, H = 1350;
 
-/* ── Positionnement (px, base 1080) ─────────────────────────── */
-var ML          = 80;   // marge gauche : rubrique, titre, auteur
-var MR          = 80;   // marge droite : word-wrap du titre
-var RUB_TOP     = 120;  // Y haut du rectangle rubrique
-var RUB_GAP     = 40;   // espace rubrique -> titre
-var TTL_GAP     = 30;   // espace titre -> auteur
-var CREDIT_X    = 50;   // X credit photo (bord gauche)
-var CREDIT_BOT  = 50;   // distance credit depuis le bord bas
-var LOGO_MARGIN = 44;   // marge bas + droite du logo O'
+/* ── Positionnement (px sur base 1080 x 1350) ───────────────── */
+var ML          = 80;   // marge gauche (rubrique, titre, auteur)
+var MR          = 80;   // marge droite (word-wrap titre)
+var RUB_TOP     = 130;  // Y haut du rectangle rubrique
+var RUB_GAP     = 44;   // espace rubrique → titre
+var TTL_GAP     = 34;   // espace titre → auteur
+var CREDIT_X    = 52;   // X credit photo
+var CREDIT_BOT  = 55;   // distance credit depuis bord bas
+var LOGO_MARGIN = 48;   // marge bas-droite logo
+var LOGO_H      = 110;  // hauteur cible du logo en px canvas
 
-/* ── Couleur du fond rubrique ────────────────────────────────── */
+/* ── Couleur fond rubrique ───────────────────────────────────── */
 var RUB_BG = '#2A3342';
 
-/* ── Elements DOM ────────────────────────────────────────────── */
-var canvas    = document.getElementById('canvas');
-var ctx       = canvas.getContext('2d');
-var dropZone  = document.getElementById('drop-zone');
-var fileInput = document.getElementById('file-input');
-var btnDl     = document.getElementById('btn-dl');
-var statusEl  = document.getElementById('status');
-var inpRub    = document.getElementById('inp-rubrique');
-var inpTitre  = document.getElementById('inp-titre');
-var inpAuteur = document.getElementById('inp-auteur');
-var inpCredit = document.getElementById('inp-credit');
+/* ── DOM ─────────────────────────────────────────────────────── */
+var canvas   = document.getElementById('canvas');
+var ctx      = canvas.getContext('2d');
+var dzBg     = document.getElementById('dz-bg');
+var fiBg     = document.getElementById('fi-bg');
+var dzLogo   = document.getElementById('dz-logo');
+var fiLogo   = document.getElementById('fi-logo');
+var btnDl    = document.getElementById('btn-dl');
+var statusEl = document.getElementById('status');
+var inpRub   = document.getElementById('inp-rub');
+var inpTitre = document.getElementById('inp-titre');
+var inpAuteur= document.getElementById('inp-auteur');
+var inpCredit= document.getElementById('inp-credit');
 
-/* ── Resolution interne du canvas ────────────────────────────── */
+/* ── Resolution interne ──────────────────────────────────────── */
 canvas.width  = W;
 canvas.height = H;
 
-/* ── Taille d'affichage responsive (max 560px) ───────────────── */
+/* ── Etat ────────────────────────────────────────────────────── */
+var bgImage   = null;
+var logoImage = null;
+
+/* ── Taille d'affichage (maintient le ratio 4:5) ────────────── */
 function fitCanvas() {
-  var avail = Math.min(window.innerWidth - 355 - 64, window.innerHeight - 64);
-  var size  = Math.max(220, Math.min(avail, 560));
-  canvas.style.width  = size + 'px';
-  canvas.style.height = size + 'px';
+  var panelW  = 340;
+  var padPrev = 60;   // padding horizontal de la zone apercu
+  var padVert = 72;   // padding vertical + labels
+
+  var availW = window.innerWidth  - panelW - padPrev;
+  var availH = window.innerHeight - padVert;
+
+  /* On contraint par la dimension la plus limitante */
+  var ratio = W / H;          // 4/5 = 0.8
+  var byW   = availW;
+  var byH   = availH * ratio; // largeur max si contrainte par hauteur
+
+  var dispW = Math.floor(Math.min(byW, byH, 500));
+  var dispH = Math.floor(dispW / ratio);
+
+  canvas.style.width  = dispW + 'px';
+  canvas.style.height = dispH + 'px';
 }
 fitCanvas();
 window.addEventListener('resize', fitCanvas);
 
-/* ── Etat global ─────────────────────────────────────────────── */
-var bgImage = null;
-
 /* ================================================================
    CHARGEMENT DES POLICES
-   On attend document.fonts.ready pour s'assurer que les Google Fonts
-   sont disponibles avant le premier rendu canvas.
 ================================================================ */
 document.fonts.ready.then(render);
 
 /* ================================================================
-   DRAG & DROP / UPLOAD IMAGE
+   UPLOAD IMAGE DE FOND
 ================================================================ */
-dropZone.addEventListener('click', function() { fileInput.click(); });
-
-fileInput.addEventListener('change', function(e) {
-  if (e.target.files[0]) loadImage(e.target.files[0]);
+dzBg.addEventListener('click', function() { fiBg.click(); });
+fiBg.addEventListener('change', function(e) {
+  if (e.target.files[0]) loadBg(e.target.files[0]);
 });
-
-dropZone.addEventListener('dragover', function(e) {
-  e.preventDefault();
-  dropZone.classList.add('over');
+dzBg.addEventListener('dragover', function(e) {
+  e.preventDefault(); dzBg.classList.add('over');
 });
-
-['dragleave', 'dragend'].forEach(function(ev) {
-  dropZone.addEventListener(ev, function() { dropZone.classList.remove('over'); });
+['dragleave','dragend'].forEach(function(ev) {
+  dzBg.addEventListener(ev, function() { dzBg.classList.remove('over'); });
 });
-
-dropZone.addEventListener('drop', function(e) {
-  e.preventDefault();
-  dropZone.classList.remove('over');
+dzBg.addEventListener('drop', function(e) {
+  e.preventDefault(); dzBg.classList.remove('over');
   var f = e.dataTransfer.files[0];
-  if (f && f.type.startsWith('image/')) loadImage(f);
+  if (f && f.type.startsWith('image/')) loadBg(f);
 });
 
-function loadImage(file) {
-  var reader = new FileReader();
-  reader.onload = function(ev) {
+function loadBg(file) {
+  var r = new FileReader();
+  r.onload = function(ev) {
     var img = new Image();
     img.onload = function() {
       bgImage = img;
-      dropZone.classList.add('filled');
-      dropZone.innerHTML =
-        '<div class="dz-ico">&#9989;</div>' +
-        '<p class="dz-main"><strong>' + safe(file.name) + '</strong></p>' +
-        '<p class="dz-hint">' + img.naturalWidth + ' &times; ' + img.naturalHeight +
-        ' px &middot; Cliquer pour changer</p>';
+      dzBg.classList.add('filled');
+      dzBg.innerHTML =
+        '<div class="ico">&#9989;</div>' +
+        '<p class="lbl"><strong>' + safe(file.name) + '</strong></p>' +
+        '<p class="hint">' + img.naturalWidth + ' &#215; ' + img.naturalHeight + ' px</p>';
       btnDl.disabled = false;
-      setStatus('Apercu pret ✓', 'ok');
+      setStatus('Apercu pret &#10003;', 'ok');
       render();
     };
     img.onerror = function() { setStatus('Image illisible', 'err'); };
     img.src = ev.target.result;
   };
-  reader.readAsDataURL(file);
+  r.readAsDataURL(file);
 }
 
-/* Echappe les caracteres HTML speciaux pour l'affichage du nom de fichier */
-function safe(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+/* ================================================================
+   UPLOAD LOGO
+================================================================ */
+dzLogo.addEventListener('click', function() { fiLogo.click(); });
+fiLogo.addEventListener('change', function(e) {
+  if (e.target.files[0]) loadLogo(e.target.files[0]);
+});
+dzLogo.addEventListener('dragover', function(e) {
+  e.preventDefault(); dzLogo.classList.add('over');
+});
+['dragleave','dragend'].forEach(function(ev) {
+  dzLogo.addEventListener(ev, function() { dzLogo.classList.remove('over'); });
+});
+dzLogo.addEventListener('drop', function(e) {
+  e.preventDefault(); dzLogo.classList.remove('over');
+  var f = e.dataTransfer.files[0];
+  if (f) loadLogo(f);
+});
+
+function loadLogo(file) {
+  var r = new FileReader();
+  r.onload = function(ev) {
+    var img = new Image();
+    img.onload = function() {
+      logoImage = img;
+      dzLogo.classList.add('filled');
+      dzLogo.innerHTML =
+        '<div class="ico">&#9989;</div>' +
+        '<p class="lbl"><strong>' + safe(file.name) + '</strong></p>' +
+        '<p class="hint">' + img.naturalWidth + ' &#215; ' + img.naturalHeight + ' px</p>';
+      render();
+    };
+    img.src = ev.target.result;
+  };
+  r.readAsDataURL(file);
 }
 
-/* ── Mise a jour en temps reel ───────────────────────────────── */
+/* ── Temps reel ──────────────────────────────────────────────── */
 [inpRub, inpTitre, inpAuteur, inpCredit].forEach(function(el) {
   el.addEventListener('input', render);
 });
 
 function setStatus(msg, cls) {
-  statusEl.textContent = msg;
-  statusEl.className   = cls || '';
+  statusEl.innerHTML = msg;
+  statusEl.className = cls || '';
+}
+
+function safe(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 /* ================================================================
-   TELECHARGEMENT DU PNG
+   TELECHARGEMENT
 ================================================================ */
 btnDl.addEventListener('click', function() {
-  render(); // re-rendu propre a pleine resolution avant export
-
-  /* Slug du titre pour le nom de fichier */
+  render();
   var slug = (inpTitre.value || 'onoris-visuel')
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '') // supprime les accents
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 48);
-
+    .replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'')
+    .slice(0,48);
   var a = document.createElement('a');
   a.href     = canvas.toDataURL('image/png');
   a.download = 'onoris-' + slug + '.png';
   a.click();
-
-  setStatus('Telechargement lance ✓', 'ok');
+  setStatus('Telechargement lance &#10003;', 'ok');
 });
 
 /* ================================================================
-   MOTEUR DE RENDU CANVAS
+   MOTEUR DE RENDU
 ================================================================ */
-
-/**
- * Fonction principale - dessine toutes les couches dans l'ordre.
- * Appelee a chaque modification d'un champ (temps reel) et au telechargement.
- */
 function render() {
   ctx.clearRect(0, 0, W, H);
 
-  /* Fond par defaut si aucune image n'est encore chargee */
+  /* Placeholder sans image */
   if (!bgImage) {
-    ctx.fillStyle = '#12131e';
+    ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, W, H);
     ctx.save();
-    ctx.font         = '600 24px "Inter", sans-serif';
-    ctx.fillStyle    = 'rgba(255,255,255,0.08)';
+    ctx.font         = '500 22px "Inter", sans-serif';
+    ctx.fillStyle    = 'rgba(255,255,255,0.10)';
     ctx.textAlign    = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('Deposez une image de fond pour commencer', W / 2, H / 2);
+    ctx.fillText('Deposez une image pour commencer', W/2, H/2);
     ctx.restore();
     return;
   }
 
-  /* === Couche 1 : image de fond === */
+  /* 1. Image de fond (cover) */
   drawBgImage();
 
-  /* === Couche 2 : overlay degrade === */
+  /* 2. Overlay degrade */
   drawOverlay();
 
-  /* === Couche 3 : rubrique (retourne { bottom }) === */
+  /* 3. Rubrique → retourne { bottom } */
   var rub = drawRubrique();
 
-  /* === Couche 4 : titre (retourne Y bas derniere ligne) === */
+  /* 4. Titre → retourne Y bas de la derniere ligne */
   var titleBottom = drawTitle(rub.bottom + RUB_GAP);
 
-  /* === Couche 5 : auteur === */
+  /* 5. Auteur */
   drawAuthor(titleBottom + TTL_GAP);
 
-  /* === Couche 6 : credit photo (optionnel) === */
+  /* 6. Credit photo (optionnel) */
   drawCredit();
 
-  /* === Couche 7 : logo O' === */
+  /* 7. Logo */
   drawLogo();
 }
 
 /* ================================================================
-   FONCTIONS DE DESSIN INDIVIDUELLES
+   FONCTIONS DE DESSIN
 ================================================================ */
 
 /*
  * 1. IMAGE DE FOND — object-fit: cover
- *
- * Calcule le facteur d'echelle minimal pour couvrir entierement
- * le canvas (comme CSS object-fit: cover), puis centre l'image.
- * Aucune deformation possible.
  */
 function drawBgImage() {
   var iw    = bgImage.naturalWidth;
   var ih    = bgImage.naturalHeight;
-  var scale = Math.max(W / iw, H / ih); // zoom minimal pour couvrir
+  var scale = Math.max(W/iw, H/ih);
   var sw    = iw * scale;
   var sh    = ih * scale;
-  var dx    = (W - sw) / 2;             // centrage horizontal
-  var dy    = (H - sh) / 2;             // centrage vertical
-  ctx.drawImage(bgImage, dx, dy, sw, sh);
+  ctx.drawImage(bgImage, (W-sw)/2, (H-sh)/2, sw, sh);
 }
 
 /*
  * 2. OVERLAY DEGRADE
  *
- * Trois passes superposees :
- *   a) Base uniforme legere : assombrit l'ensemble sans brutalite
- *   b) Degrade haut→bas     : zone du texte bien lisible
- *   c) Degrade bas→haut     : credit et logo lisibles
+ * Format 4:5 : le bloc texte occupe ~35% du haut.
+ * On assombrit 0-60% en haut, puis 75-100% en bas.
  */
 function drawOverlay() {
-  /* a) Base uniforme */
-  ctx.fillStyle = 'rgba(0,0,0,0.20)';
+  /* Base uniforme */
+  ctx.fillStyle = 'rgba(0,0,0,0.18)';
   ctx.fillRect(0, 0, W, H);
 
-  /* b) Degrade descendant : noir opaque en haut -> transparent vers 70% */
-  var top = ctx.createLinearGradient(0, 0, 0, H * 0.70);
-  top.addColorStop(0.00, 'rgba(0,0,0,0.62)');
-  top.addColorStop(0.50, 'rgba(0,0,0,0.20)');
+  /* Degrade haut : fort en haut, disparat vers 60% */
+  var top = ctx.createLinearGradient(0, 0, 0, H * 0.62);
+  top.addColorStop(0.00, 'rgba(0,0,0,0.65)');
+  top.addColorStop(0.45, 'rgba(0,0,0,0.22)');
   top.addColorStop(1.00, 'rgba(0,0,0,0.00)');
   ctx.fillStyle = top;
-  ctx.fillRect(0, 0, W, H * 0.70);
+  ctx.fillRect(0, 0, W, H * 0.62);
 
-  /* c) Degrade remontant : transparent vers 70% -> noir en bas */
-  var bot = ctx.createLinearGradient(0, H * 0.70, 0, H);
+  /* Degrade bas : discret, pour credit et logo */
+  var bot = ctx.createLinearGradient(0, H*0.72, 0, H);
   bot.addColorStop(0.0, 'rgba(0,0,0,0.00)');
-  bot.addColorStop(1.0, 'rgba(0,0,0,0.52)');
+  bot.addColorStop(1.0, 'rgba(0,0,0,0.55)');
   ctx.fillStyle = bot;
-  ctx.fillRect(0, H * 0.70, W, H * 0.30);
+  ctx.fillRect(0, H*0.72, W, H*0.28);
 }
 
 /*
  * 3. BLOC RUBRIQUE
- *
- * Rectangle fond #2A3342, angles arrondis 3px, texte Inter 700 29px majuscules.
- * Letter-spacing : 1.4px (tracking typographique).
- * Retourne { bottom } : coordonnee Y du bord inferieur du rectangle.
+ * Rectangle #2A3342 + Inter 700 29px majuscules + tracking 1.4px
+ * Retourne { bottom } pour positionner le titre.
  */
 function drawRubrique() {
   var text  = (inpRub.value.trim() || 'RUBRIQUE').toUpperCase();
   var FS    = 29;
-  var PAD_H = 16; // padding horizontal interne
-  var PAD_V = 10; // padding vertical interne
+  var PAD_H = 16;
+  var PAD_V = 10;
 
   ctx.save();
   ctx.font          = '700 ' + FS + 'px "Inter", "Arial Black", sans-serif';
   ctx.letterSpacing = '1.4px';
 
-  /* measureText inclut letterSpacing (Canvas Level 2) */
   var tw    = ctx.measureText(text).width;
   var rectW = tw + PAD_H * 2;
   var rectH = FS + PAD_V * 2;
-  var rectX = ML;
-  var rectY = RUB_TOP;
 
-  /* Rectangle fond : roundRect si disponible, sinon fillRect */
+  /* Rectangle fond */
   ctx.fillStyle = RUB_BG;
   if (typeof ctx.roundRect === 'function') {
     ctx.beginPath();
-    ctx.roundRect(rectX, rectY, rectW, rectH, 3);
+    ctx.roundRect(ML, RUB_TOP, rectW, rectH, 3);
     ctx.fill();
   } else {
-    ctx.fillRect(rectX, rectY, rectW, rectH);
+    ctx.fillRect(ML, RUB_TOP, rectW, rectH);
   }
 
-  /* Texte blanc, aligne en haut a gauche avec padding */
+  /* Texte */
   ctx.fillStyle    = '#ffffff';
   ctx.textBaseline = 'top';
   ctx.textAlign    = 'left';
-  ctx.fillText(text, rectX + PAD_H, rectY + PAD_V);
+  ctx.fillText(text, ML + PAD_H, RUB_TOP + PAD_V);
 
   ctx.restore();
-  return { bottom: rectY + rectH };
+  return { bottom: RUB_TOP + rectH };
 }
 
 /*
- * 4. TITRE — word-wrap automatique
- *
- * Police : Noto Serif Display Regular 400, 74px, couleur blanche.
- * Interligne : 1.20 (line-height).
- * Largeur max : W - ML - MR = 920px (marges gauche et droite de 80px).
- *
- * @param  startY {number} - Y du haut de la premiere ligne
- * @returns {number}       - Y du bas de la derniere ligne
+ * 4. TITRE — Noto Serif Display 400, 74px, word-wrap
+ * Retourne le Y bas de la derniere ligne.
  */
 function drawTitle(startY) {
   var text   = inpTitre.value || '';
   var FS     = 74;
-  var LINE_H = FS * 1.20; // interligne
+  var LINE_H = FS * 1.20;
   var MAX_W  = W - ML - MR;
 
   ctx.save();
@@ -590,15 +686,11 @@ function drawTitle(startY) {
 }
 
 /*
- * 5. AUTEUR
- *
- * Open Sans Regular 27px, blanc 92%, positionne sous le titre.
- * @param startY {number} - Y du texte auteur
+ * 5. AUTEUR — Open Sans 400, 27px
  */
 function drawAuthor(startY) {
   var text = inpAuteur.value.trim();
   if (!text) return;
-
   ctx.save();
   ctx.font          = '400 27px "Open Sans", Arial, sans-serif';
   ctx.fillStyle     = 'rgba(255,255,255,0.92)';
@@ -610,18 +702,14 @@ function drawAuthor(startY) {
 }
 
 /*
- * 6. CREDIT PHOTO
- *
- * Open Sans Regular 23px, blanc 78%, bas-gauche.
- * Si le champ est vide, rien n'est affiche.
+ * 6. CREDIT PHOTO — Open Sans 400, 23px, bas-gauche, optionnel
  */
 function drawCredit() {
   var text = inpCredit.value.trim();
   if (!text) return;
-
   ctx.save();
   ctx.font          = '400 23px "Open Sans", Arial, sans-serif';
-  ctx.fillStyle     = 'rgba(255,255,255,0.78)';
+  ctx.fillStyle     = 'rgba(255,255,255,0.80)';
   ctx.textBaseline  = 'bottom';
   ctx.textAlign     = 'left';
   ctx.letterSpacing = '0px';
@@ -630,83 +718,56 @@ function drawCredit() {
 }
 
 /*
- * 7. LOGO O' — rendu vectoriel, bas-droite
+ * 7. LOGO — bas-droite
  *
- * Reproduit le logo Onoris Journal en utilisant strokeText uniquement
- * (sans fillText). L'interieur reste transparent : seul le contour blanc
- * est visible, reproduisant fidelement le style "outline" du logo original.
+ * Si un PNG a ete uploade : on le dessine tel quel.
+ *   Le PNG doit avoir un fond TRANSPARENT pour que le logo
+ *   blanc s'affiche proprement sur la photo assombrie.
  *
- * Police : Noto Serif Display italic 96px (meme famille que le titre).
- * Caractere : O + apostrophe typographique droite (U+2019).
- * Ombre portee legere pour la lisibilite sur fonds clairs.
+ * Aucun logo uploade : rien n'est affiche (pas de fallback texte).
  */
 function drawLogo() {
-  var FS       = 96;
-  var LOGO_CHR = 'O’'; // O + RIGHT SINGLE QUOTATION MARK
+  if (!logoImage) return;
+
+  var lh = LOGO_H;
+  var lw = logoImage.naturalWidth * (lh / logoImage.naturalHeight);
+  var x  = W - LOGO_MARGIN - lw;
+  var y  = H - LOGO_MARGIN - lh;
 
   ctx.save();
-  ctx.font          = 'italic ' + FS + 'px "Noto Serif Display", Georgia, serif';
-  ctx.textBaseline  = 'bottom';
-  ctx.textAlign     = 'right';
-  ctx.letterSpacing = '0px';
-
-  /* Ombre legere pour lisibilite sur fonds lumineux */
-  ctx.shadowColor   = 'rgba(0,0,0,0.42)';
-  ctx.shadowBlur    = 12;
-  ctx.shadowOffsetX = 1;
-  ctx.shadowOffsetY = 2;
-
-  /* Stroke blanc = contour seul, interieur transparent */
-  ctx.strokeStyle = 'rgba(255,255,255,0.88)';
-  ctx.lineWidth   = 2.2;
-  ctx.lineJoin    = 'round';
-  ctx.strokeText(LOGO_CHR, W - LOGO_MARGIN, H - LOGO_MARGIN);
-
+  ctx.globalAlpha = 0.90;
+  ctx.drawImage(logoImage, x, y, lw, lh);
   ctx.restore();
 }
 
 /* ================================================================
    UTILITAIRE : WORD WRAP
-   ----------------------------------------------------------------
-   Decoupe un texte en un tableau de lignes dont la largeur
-   ne depasse pas maxWidth (en px selon la police active du ctx).
-   Respecte les sauts de ligne explicites \n dans le texte source.
+   Decoupe text en lignes de largeur <= maxWidth.
+   Respecte les \n existants.
 ================================================================ */
-/**
- * @param  c        {CanvasRenderingContext2D}
- * @param  text     {string}
- * @param  maxWidth {number} largeur max en px
- * @returns         {string[]} tableau de lignes
- */
 function wordWrap(c, text, maxWidth) {
   if (!text) return [''];
-
   var out   = [];
   var paras = text.split('\n');
-
   for (var p = 0; p < paras.length; p++) {
     var para = paras[p];
     if (!para.trim()) { out.push(''); continue; }
-
     var words = para.split(/\s+/).filter(Boolean);
     var line  = '';
-
     for (var w = 0; w < words.length; w++) {
-      var candidate = line ? line + ' ' + words[w] : words[w];
-      if (c.measureText(candidate).width > maxWidth && line) {
-        out.push(line);
-        line = words[w];
+      var cand = line ? line + ' ' + words[w] : words[w];
+      if (c.measureText(cand).width > maxWidth && line) {
+        out.push(line); line = words[w];
       } else {
-        line = candidate;
+        line = cand;
       }
     }
     if (line) out.push(line);
   }
-
   return out;
 }
 
-/* ── Rendu initial (placeholder) ────────────────────────────── */
+/* Rendu initial */
 render();
 </script>
 </body>
