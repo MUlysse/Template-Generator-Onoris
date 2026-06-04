@@ -52,6 +52,13 @@
     #canvas-shell { line-height: 0; border-radius: 2px; overflow: hidden; box-shadow: 0 0 0 1px rgba(0,0,0,0.10), 0 8px 32px rgba(0,0,0,0.14); width: min(100%, calc(100vh - 140px)); flex-shrink: 1; }
     #canvas { display: block; width: 100%; height: auto; }
     .prev-meta { font-size: 10.5px; color: var(--muted); flex-shrink: 0; }
+    .toggle-row { display: flex; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+    .toggle-btn { flex: 1; padding: 7px 10px; background: var(--card); border: none; border-right: 1px solid var(--border); font-family: inherit; font-size: 12px; font-weight: 500; color: var(--muted); cursor: pointer; transition: background 0.12s, color 0.12s; }
+    .toggle-btn:last-child { border-right: none; }
+    .toggle-btn.active { background: var(--btn); color: var(--btn-txt); }
+    .chk-row { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .chk-row input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; accent-color: var(--btn); flex-shrink: 0; }
+    .chk-row span { font-size: 13px; color: var(--text); user-select: none; }
   </style>
 </head>
 <body>
@@ -96,6 +103,28 @@
         <label>Cr&#233;dit photo <em>(optionnel)</em></label>
         <input type="text" id="inp-credit" value="" placeholder="&#169; Agence / Photographe">
       </div>
+      <hr class="sep">
+      <div class="field">
+        <label>Options d&#8217;affichage</label>
+        <label class="chk-row">
+          <input type="checkbox" id="chk-overlay" checked>
+          <span>Effet sombre en haut</span>
+        </label>
+      </div>
+      <div class="field">
+        <label>Couleur du titre</label>
+        <div class="toggle-row">
+          <button class="toggle-btn active" id="btn-titre-blanc" data-target="titre" data-val="blanc">Blanc</button>
+          <button class="toggle-btn" id="btn-titre-noir" data-target="titre" data-val="noir">Noir</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Couleur de l&#8217;auteur</label>
+        <div class="toggle-row">
+          <button class="toggle-btn active" id="btn-auteur-blanc" data-target="auteur" data-val="blanc">Blanc</button>
+          <button class="toggle-btn" id="btn-auteur-noir" data-target="auteur" data-val="noir">Noir</button>
+        </div>
+      </div>
     </div>
     <div id="sidebar-foot">
       <div id="status">En attente d&#8217;une image&#8230;</div>
@@ -127,6 +156,9 @@ var inpRub   = document.getElementById('inp-rub');
 var inpTitre = document.getElementById('inp-titre');
 var inpAuteur= document.getElementById('inp-auteur');
 var inpCredit= document.getElementById('inp-credit');
+var chkOverlay = document.getElementById('chk-overlay');
+var titreColor = 'blanc';
+var auteurColor = 'blanc';
 
 canvas.width = W; canvas.height = H;
 
@@ -186,6 +218,18 @@ function loadBg(file) {
 
 
 [inpRub, inpTitre, inpAuteur, inpCredit].forEach(function(el) { el.addEventListener('input', render); });
+chkOverlay.addEventListener('change', render);
+document.querySelectorAll('.toggle-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var target = this.getAttribute('data-target');
+    var val = this.getAttribute('data-val');
+    this.closest('.toggle-row').querySelectorAll('.toggle-btn').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+    if (target === 'titre') titreColor = val;
+    else auteurColor = val;
+    render();
+  });
+});
 function setStatus(msg, cls) { statusEl.innerHTML = msg; statusEl.className = cls || ''; }
 function safe(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -233,11 +277,13 @@ function drawBgImage() {
 
 function drawOverlay() {
   ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.fillRect(0, 0, W, H);
-  var top = ctx.createLinearGradient(0, 0, 0, H*0.58);
-  top.addColorStop(0.00, 'rgba(0,0,0,0.70)');
-  top.addColorStop(0.40, 'rgba(0,0,0,0.22)');
-  top.addColorStop(1.00, 'rgba(0,0,0,0.00)');
-  ctx.fillStyle = top; ctx.fillRect(0, 0, W, H*0.58);
+  if (chkOverlay.checked) {
+    var top = ctx.createLinearGradient(0, 0, 0, H*0.58);
+    top.addColorStop(0.00, 'rgba(0,0,0,0.70)');
+    top.addColorStop(0.40, 'rgba(0,0,0,0.22)');
+    top.addColorStop(1.00, 'rgba(0,0,0,0.00)');
+    ctx.fillStyle = top; ctx.fillRect(0, 0, W, H*0.58);
+  }
   var bot = ctx.createLinearGradient(0, H*0.68, 0, H);
   bot.addColorStop(0.0, 'rgba(0,0,0,0.00)');
   bot.addColorStop(1.0, 'rgba(0,0,0,0.55)');
@@ -267,7 +313,7 @@ function drawTitle(startY) {
   var FS = 68, LINE_H = FS * 1.18, MAX_W = W - ML - MR;
   ctx.save();
   ctx.font = '400 ' + FS + 'px "Noto Serif Display", Georgia, serif';
-  ctx.fillStyle = '#ffffff'; ctx.textBaseline = 'top'; ctx.textAlign = 'left'; ctx.letterSpacing = '0px';
+  ctx.fillStyle = titreColor === 'noir' ? '#000000' : '#ffffff'; ctx.textBaseline = 'top'; ctx.textAlign = 'left'; ctx.letterSpacing = '0px';
   var lines = wordWrap(ctx, text, MAX_W);
   for (var i = 0; i < lines.length; i++) ctx.fillText(lines[i], ML, startY + i*LINE_H);
   ctx.restore();
@@ -279,7 +325,7 @@ function drawAuthor(startY) {
   if (!text) return;
   ctx.save();
   ctx.font = '400 25px "Open Sans", Arial, sans-serif';
-  ctx.fillStyle = 'rgba(255,255,255,0.90)'; ctx.textBaseline = 'top'; ctx.textAlign = 'left'; ctx.letterSpacing = '0px';
+  ctx.fillStyle = auteurColor === 'noir' ? 'rgba(0,0,0,0.90)' : 'rgba(255,255,255,0.90)'; ctx.textBaseline = 'top'; ctx.textAlign = 'left'; ctx.letterSpacing = '0px';
   ctx.fillText(text, ML, startY);
   ctx.restore();
 }
